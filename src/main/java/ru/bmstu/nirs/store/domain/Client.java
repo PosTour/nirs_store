@@ -1,6 +1,8 @@
 package ru.bmstu.nirs.store.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,12 +22,17 @@ public class Client {
     private int id;
 
     @Column(name = "full_name")
+    @Pattern(regexp = "[A-Z]\\w+ [A-Z]\\w+ [A-Z]\\w+",
+            message = "Полное имя имеет следующий вид: 'Фамилия Имя Отчество'")
     private String name;
 
     @Column(name = "phone")
+    @Pattern(regexp = "^\\d{11}$",
+            message = "Телефон записывается начинается с цифры 8 и содержит 11 символов")
     private String phone;
 
     @Column(name = "email")
+    @Email(message = "Некорректный адрес электронной почты")
     private String email;
 
     @OneToMany(mappedBy = "customer")
