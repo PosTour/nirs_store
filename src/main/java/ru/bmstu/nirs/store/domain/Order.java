@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "order")
@@ -38,10 +39,13 @@ public class Order {
 
     @ManyToMany
     @JoinTable(
-            name = "order_idem",
+            name = "order_item",
             joinColumns = @JoinColumn(name = "order_id"),
             inverseJoinColumns = @JoinColumn(name = "item_id"))
     private List<Item> items;
+
+    @Transient
+    private Map<Item, Integer> quantities;
 
     public Order(Client customerId, String city, String address, Date orderDate) {
         this.customer = customerId;
