@@ -29,9 +29,6 @@ public class Item {
     @Column(name = "quantity")
     private int quantity;
 
-    @Column(name = "is_in_catalogue")
-    private boolean isInCatalogue;
-
     @Column(name = "purchase_price", precision = 10, scale = 2)
     private BigDecimal purchasePrice;
 
@@ -45,10 +42,11 @@ public class Item {
     @ManyToMany(mappedBy = "items")
     private List<Order> orders;
 
-    public Item(String name, String description, BigDecimal purchasePrice, BigDecimal sellingPrice) {
+    public Item(String name, String description, BigDecimal purchasePrice, BigDecimal sellingPrice, Category category) {
         this.name = name;
         this.description = description;
         this.purchasePrice = purchasePrice;
         this.sellingPrice = sellingPrice;
+        this.category = category;
     }
 }

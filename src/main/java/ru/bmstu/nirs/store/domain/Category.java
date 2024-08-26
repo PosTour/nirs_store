@@ -1,6 +1,7 @@
 package ru.bmstu.nirs.store.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,6 +21,8 @@ public class Category {
     private int id;
 
     @Column(name = "name")
+    @Pattern(regexp = "[А-Я]\\w+",
+            message = "Название категории должно начинаться с большой буквы")
     private String name;
 
     @OneToMany(mappedBy = "category")

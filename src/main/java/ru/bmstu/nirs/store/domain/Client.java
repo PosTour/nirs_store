@@ -22,7 +22,7 @@ public class Client {
     private int id;
 
     @Column(name = "full_name")
-    @Pattern(regexp = "[A-Z]\\w+ [A-Z]\\w+ [A-Z]\\w+",
+    @Pattern(regexp = "[А-Я]\\w+ [А-Я]\\w+ [А-Я]\\w+",
             message = "Полное имя имеет следующий вид: 'Фамилия Имя Отчество'")
     private String name;
 
