@@ -50,6 +50,22 @@ public class ItemService {
         }
     }
 
+    public void increaseStock(int id, int amount) {
+        var item = itemRepository.findById(id);
+        if (item.isPresent()) {
+            item.get().setQuantity(item.get().getQuantity() + amount);
+            itemRepository.save(item.get());
+        }
+    }
+
+    public void decreaseStock(int id, int amount) {
+        var item = itemRepository.findById(id);
+        if (item.isPresent()) {
+            item.get().setQuantity(item.get().getQuantity() - amount);
+            itemRepository.save(item.get());
+        }
+    }
+
     public void delete(int id) {
         itemRepository.deleteById(id);
     }

@@ -37,13 +37,13 @@ public class ClientController {
     }
 
     @GetMapping("/edit/{id}")
-    public String edit(@PathVariable int id, Model model) {
+    public String edit(@PathVariable("id") int id, Model model) {
         model.addAttribute("client", clientService.findById(id));
         return "";
     }
 
     @PatchMapping("/update/{id}")
-    public String update(@PathVariable int id,
+    public String update(@PathVariable("id") int id,
                          @ModelAttribute("client") @Valid Client client,
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

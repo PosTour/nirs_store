@@ -42,6 +42,9 @@ public class Item {
     @ManyToMany(mappedBy = "items")
     private List<Order> orders;
 
+    @ManyToMany(mappedBy = "items")
+    private List<Basket> baskets;
+
     public Item(String name, String description, BigDecimal purchasePrice, BigDecimal sellingPrice, Category category) {
         this.name = name;
         this.description = description;
