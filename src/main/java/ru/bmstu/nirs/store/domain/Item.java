@@ -38,6 +38,10 @@ public class Item {
     @Column(name = "selling_price", precision = 10, scale = 2)
     private BigDecimal sellingPrice;
 
+    @ManyToOne()
+    @JoinColumn(name = "category", referencedColumnName = "id")
+    private Category category;
+
     @ManyToMany(mappedBy = "items")
     private List<Order> orders;
 
