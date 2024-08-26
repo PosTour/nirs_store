@@ -4,12 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.bmstu.nirs.store.domain.Item;
 import ru.bmstu.nirs.store.domain.Order;
 import ru.bmstu.nirs.store.service.OrderService;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/order")
@@ -23,14 +19,16 @@ public class OrderController {
     }
 
     @GetMapping("/new")
-    public String newOrder(Model model) {
+    public String newOrder(Model model, @ModelAttribute("basket_id") int basketId) {
         model.addAttribute("order", new Order());
+        model.addAttribute("basket_id", basketId);
         return "";
     }
 
     @PostMapping("/add")
-    public String create(@ModelAttribute("order") Order order) {
-        orderService.save(order);
+    public String create(@ModelAttribute("order") Order order,
+                         @ModelAttribute("basket_id") int basketId) {
+        orderService.save(order, basketId);
         return "";
     }
 

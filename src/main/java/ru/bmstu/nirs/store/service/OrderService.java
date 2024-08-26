@@ -19,16 +19,18 @@ public class OrderService {
     private final ClientService clientService;
     private final ItemService itemService;
     private final JdbcTemplate jdbcTemplate;
+    private final BasketService basketService;
 
     @Autowired
-    public OrderService(OrderRepository orderRepository, ClientService clientService, ItemService itemService, JdbcTemplate jdbcTemplate) {
+    public OrderService(OrderRepository orderRepository, ClientService clientService, ItemService itemService, JdbcTemplate jdbcTemplate, BasketService basketService) {
         this.orderRepository = orderRepository;
         this.clientService = clientService;
         this.itemService = itemService;
         this.jdbcTemplate = jdbcTemplate;
+        this.basketService = basketService;
     }
 
-    public void save(Order order) {
+    public void save(Order order, int basketId) {
         order.setOrderDate(new Date());
         orderRepository.save(order);
 
@@ -38,6 +40,8 @@ public class OrderService {
                     "UPDATE order_item SET quantity=? WHERE order_id=? AND item_id=?",
                     value, order.getId(), key.getId());
         });
+
+        basketService.delete(basketId);
     }
 
     @Transactional(readOnly = true)
