@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "basket")
@@ -25,10 +26,13 @@ public class Basket {
 
     @ManyToMany
     @JoinTable(
-            name = "order_idem",
-            joinColumns = @JoinColumn(name = "order_id"),
+            name = "basket_item",
+            joinColumns = @JoinColumn(name = "basket_id"),
             inverseJoinColumns = @JoinColumn(name = "item_id"))
     private List<Item> items;
+
+    @Transient
+    private Map<Item, Integer> quantities;
 
     public Basket(Client customer) {
         this.customer = customer;
