@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: store
+
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    generate-ddl: false
+    hibernate:
+      ddl-auto: validate
+  datasource:
+    url: jdbc:postgresql://localhost:5432/store
+    username: postgres
+    password: postgres
