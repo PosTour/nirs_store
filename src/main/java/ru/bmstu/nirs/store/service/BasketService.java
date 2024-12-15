@@ -1,5 +1,6 @@
 package ru.bmstu.nirs.store.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,20 +14,13 @@ import java.util.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class BasketService {
 
     private final BasketRepository basketRepository;
     private final ClientService clientService;
     private final ItemService itemService;
     private final JdbcTemplate jdbcTemplate;
-
-    @Autowired
-    public BasketService(BasketRepository basketRepository, ClientService clientService, ItemService itemService, JdbcTemplate jdbcTemplate) {
-        this.basketRepository = basketRepository;
-        this.clientService = clientService;
-        this.itemService = itemService;
-        this.jdbcTemplate = jdbcTemplate;
-    }
 
     @Transactional(readOnly = true)
     public Optional<Basket> findById(int id) {

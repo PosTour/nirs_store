@@ -1,5 +1,6 @@
 package ru.bmstu.nirs.store.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,14 +10,10 @@ import ru.bmstu.nirs.store.service.BasketService;
 
 @Controller
 @RequestMapping("/basket")
+@RequiredArgsConstructor
 public class BasketController {
 
     private final BasketService basketService;
-
-    @Autowired
-    public BasketController(BasketService basketService) {
-        this.basketService = basketService;
-    }
 
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") int id, Model model) {

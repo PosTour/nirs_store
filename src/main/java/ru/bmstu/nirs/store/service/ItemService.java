@@ -1,5 +1,6 @@
 package ru.bmstu.nirs.store.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,16 +12,11 @@ import java.util.Optional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ItemService {
 
     private final ItemRepository itemRepository;
     private final CategoryService categoryService;
-
-    @Autowired
-    public ItemService(ItemRepository itemRepository, CategoryService categoryService) {
-        this.itemRepository = itemRepository;
-        this.categoryService = categoryService;
-    }
 
     public void save(Item item) {
         itemRepository.save(item);

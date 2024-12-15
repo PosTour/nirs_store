@@ -1,5 +1,6 @@
 package ru.bmstu.nirs.store.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,14 +10,10 @@ import ru.bmstu.nirs.store.service.OrderService;
 
 @Controller
 @RequestMapping("/order")
+@RequiredArgsConstructor
 public class OrderController {
 
     private final OrderService orderService;
-
-    @Autowired
-    public OrderController(OrderService orderService) {
-        this.orderService = orderService;
-    }
 
     @GetMapping("/new")
     public String newOrder(Model model, @ModelAttribute("basket_id") int basketId) {

@@ -1,5 +1,6 @@
 package ru.bmstu.nirs.store.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,16 +11,11 @@ import ru.bmstu.nirs.store.service.ItemService;
 
 @Controller
 @RequestMapping("/item")
+@RequiredArgsConstructor
 public class ItemController {
 
     private final ItemService itemService;
     private final CategoryService categoryService;
-
-    @Autowired
-    public ItemController(ItemService itemService, CategoryService categoryService) {
-        this.itemService = itemService;
-        this.categoryService = categoryService;
-    }
 
     @GetMapping("/new")
     public String newItem(Model model) {

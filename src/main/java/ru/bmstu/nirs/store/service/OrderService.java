@@ -1,5 +1,6 @@
 package ru.bmstu.nirs.store.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -13,6 +14,7 @@ import java.util.*;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class OrderService {
 
     private final OrderRepository orderRepository;
@@ -20,15 +22,6 @@ public class OrderService {
     private final ItemService itemService;
     private final JdbcTemplate jdbcTemplate;
     private final BasketService basketService;
-
-    @Autowired
-    public OrderService(OrderRepository orderRepository, ClientService clientService, ItemService itemService, JdbcTemplate jdbcTemplate, BasketService basketService) {
-        this.orderRepository = orderRepository;
-        this.clientService = clientService;
-        this.itemService = itemService;
-        this.jdbcTemplate = jdbcTemplate;
-        this.basketService = basketService;
-    }
 
     public void save(Order order, int basketId) {
         order.setOrderDate(new Date());
