@@ -13,3 +13,10 @@ spring:
     url: jdbc:postgresql://localhost:5432/store
     username: postgres
     password: postgres
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+
+server:
+  port: 8081
