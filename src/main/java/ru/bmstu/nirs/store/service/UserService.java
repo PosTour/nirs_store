@@ -1,6 +1,7 @@
 package ru.bmstu.nirs.store.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bmstu.nirs.store.domain.User;
@@ -15,8 +16,11 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public void save(User user) {
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodedPassword);
         userRepository.save(user);
     }
 
@@ -39,6 +43,7 @@ public class UserService {
         var user = userRepository.findById(id);
         if (user.isPresent()) {
             updatedUser.setId(id);
+            updatedUser.setPassword(user.get().getPassword());
             userRepository.save(updatedUser);
         }
     }

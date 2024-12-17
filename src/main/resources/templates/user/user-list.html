@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пользователи</title>
+    <link rel="stylesheet" th:href="@{/css/item.css}">
+</head>
+<body>
+
+<!-- Header Panel -->
+<header class="header">
+    <div class="title">Cinema World</div>
+    <div class="header-icons">
+        <a href="/cart"><img src="/icons/cart.svg" alt="Cart" class="cart-icon"></a>
+        <a href="/auth/lks"><img src="/icons/user.svg" alt="User" class="user-icon"></a>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <header>
+        <h1>Пользователи</h1>
+    </header>
+
+    <!-- Users List -->
+    <div class="users-list">
+        <h2>Пользователи</h2>
+        <ul>
+            <li th:each="user : ${users}">
+                <a th:href="@{/admin/user/{id}(id=${user.getId()})}" class="item-link">
+                    <span th:text="${user.getUsername()}"></span> -
+                    <span th:text="${user.getName()}"></span> -
+                    <span th:text="${user.getPhone()}"></span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Add New User -->
+    <div class="new-item">
+        <a th:href="@{/admin/user/new}" class="create-item-btn">Добавить нового пользователя</a>
+    </div>
+</div>
+
+</body>
+</html>

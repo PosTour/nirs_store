@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Клиент: ' + ${client.getName()}"></title>
+    <link rel="stylesheet" th:href="@{/css/client.css}">
+</head>
+<body>
+
+<!-- Header Panel -->
+<header class="header">
+    <div class="title">Cinema World</div>
+    <div class="header-icons">
+        <a href="/cart"><img src="/icons/cart.svg" alt="Cart" class="cart-icon"></a>
+        <a href="/auth/lks"><img src="/icons/user.svg" alt="User" class="user-icon"></a>
+    </div>
+</header>
+
+<div class="container">
+    <header>
+        <h1 th:text="${client.getName()}">Имя клиента</h1>
+    </header>
+
+    <div class="client-details">
+        <p><strong>Телефон:</strong> <span th:text="${client.getPhone()}"></span></p>
+        <p><strong>Email:</strong> <span th:text="${client.getEmail()}"></span></p>
+        <p><strong>Заказы:</strong> <span th:text="${client.getOrders().size()}"></span></p>
+    </div>
+
+    <div class="update-link">
+        <a th:href="@{/client/edit/{id}(id=${client.getId()})}" class="back-btn">Редактировать</a>
+    </div>
+
+    <div class="update-link">
+        <a th:href="@{/order/find_by_client_id/{id}(id=${client.getId()})}" class="back-btn">Перейти к заказам</a>
+    </div>
+
+    <div class="back-link">
+        <a th:href="@{/client/find_all}" class="back-btn">Вернуться</a>
+    </div>
+</div>
+
+</body>
+</html>

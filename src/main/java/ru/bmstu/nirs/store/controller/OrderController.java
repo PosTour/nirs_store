@@ -33,20 +33,20 @@ public class OrderController {
         var order = orderService.findById(id);
         order.ifPresent(orderService::setItemsQuantity);
 
-        model.addAttribute("order", order);
-        return "";
+        model.addAttribute("order", order.get());
+        return "order/order";
     }
 
     @GetMapping("/find_by_client_id/{id}")
     public String findByClientId(@PathVariable("id") int id, Model model) {
         model.addAttribute("orders", orderService.findAllByClientId(id));
-        return "";
+        return "client/client-orders";
     }
 
     @GetMapping("/find_all")
     public String findAll(Model model) {
         model.addAttribute("orders", orderService.findAll());
-        return "order-list";
+        return "order/order-list";
     }
 
     @GetMapping("/edit/{id}")
@@ -54,7 +54,7 @@ public class OrderController {
         var order = orderService.findById(id);
         order.ifPresent(orderService::setItemsQuantity);
 
-        model.addAttribute("order", order);
+        model.addAttribute("order", order.get());
         return "";
     }
 

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="'Пользователь: ' + ${user.getUsername()}"></title>
+    <link rel="stylesheet" th:href="@{/css/item.css}">
+</head>
+<body>
+
+<!-- Header Panel -->
+<header class="header">
+    <div class="title">Cinema World</div>
+    <div class="header-icons">
+        <a href="/cart"><img src="/icons/cart.svg" alt="Cart" class="cart-icon"></a>
+        <a href="/auth/lks"><img src="/icons/user.svg" alt="User" class="user-icon"></a>
+    </div>
+</header>
+
+<div class="container">
+    <header>
+        <h1 th:text="${user.getUsername()}">Наименование</h1>
+    </header>
+
+    <div class="user-details">
+        <p><strong>Имя:</strong> <span th:text="${user.getName()}"></span></p>
+        <p><strong>Фамилия:</strong> <span th:text="${user.getSurname()}"></span></p>
+        <p><strong>Телефон:</strong> <span th:text="${user.getPhone()}"></span></p>
+        <p><strong>Роль:</strong> <span th:text="${user.getRole()}"></span></p>
+    </div>
+
+    <div class="update-link">
+        <a th:href="@{/admin/user/edit/{id}(id=${user.getId()})}" class="back-btn">Редактировать</a>
+    </div>
+
+    <div class="back-link">
+        <a th:href="@{/admin/user/find_all}" class="back-btn">Вернуться</a>
+    </div>
+</div>
+
+</body>
+</html>

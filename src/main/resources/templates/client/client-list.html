@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Клиенты</title>
+    <link rel="stylesheet" th:href="@{/css/client.css}">
+</head>
+<body>
+
+<!-- Header Panel -->
+<header class="header">
+    <div class="title">Cinema World</div>
+    <div class="header-icons">
+        <a href="/cart"><img src="/icons/cart.svg" alt="Cart" class="cart-icon"></a>
+        <a href="/auth/lks"><img src="/icons/user.svg" alt="User" class="user-icon"></a>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <header>
+        <h1>Клиенты</h1>
+    </header>
+
+    <!-- Clients List -->
+    <div class="clients-list">
+        <h2>Клиенты</h2>
+        <ul>
+            <li th:each="client : ${clients}">
+                <a th:href="@{/client/{id}(id=${client.getId()})}" class="client-link">
+                    <span th:text="${client.getName()}"></span> -
+                    <span th:text="${client.getPhone()}"></span> -
+                    <span th:text="${client.getEmail()}"></span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Add New Client -->
+    <div class="new-client">
+        <a th:href="@{/client/new}" class="create-client-btn">Добавить нового клиента</a>
+    </div>
+</div>
+
+</body>
+</html>

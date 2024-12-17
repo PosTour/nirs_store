@@ -8,8 +8,18 @@
 </head>
 <body>
 
-<div class="order-list-container">
-    <h2 class="order-list-title">Заказы</h2>
+<header class="header">
+    <div class="title">Cinema World</div>
+    <div class="header-icons">
+        <a href="/cart"><img src="/icons/cart.svg" alt="Cart" class="cart-icon"></a>
+        <a href="/auth/lks"><img src="/icons/user.svg" alt="User" class="user-icon"></a>
+    </div>
+</header>
+
+<div class="order-list-container container">
+    <header>
+        <h1 class="order-list-title">Заказы</h1>
+    </header>
 
     <div th:if="${orders.isEmpty()}" class="no-orders-message">
         Пока что нет заказов.
@@ -18,7 +28,7 @@
     <div th:each="order : ${orders}" class="order-item">
         <a th:href="@{/order/{id}(id=${order.getId()})}" class="order-link">
             <div class="order-info">
-                <span class="order-date">Дата создания: <span th:text="${order.getDate()}"></span></span>
+                <span class="order-date">Дата создания: <span th:text="${order.getOrderDate()}"></span></span>
                 <span class="order-status">Покупатель: <span th:text="${order.getCustomer().getName()}"></span></span>
                 <span class="order-id">Сумма: <span th:text="${order.getTotalAmount()}"></span></span>
             </div>

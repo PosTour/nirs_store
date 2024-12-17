@@ -8,12 +8,22 @@
 </head>
 <body>
 
-<div class="order-details-container">
-  <h2 class="order-details-title">Детали заказа</h2>
+<header class="header">
+  <div class="title">Cinema World</div>
+  <div class="header-icons">
+    <a href="/cart"><img src="/icons/cart.svg" alt="Cart" class="cart-icon"></a>
+    <a href="/auth/lks"><img src="/icons/user.svg" alt="User" class="user-icon"></a>
+  </div>
+</header>
+
+<div class="order-details-container container">
+  <header>
+    <h1 class="order-details-title">Детали заказа</h1>
+  </header>
 
   <div class="order-info">
     <p><strong>Идентификатор:</strong> <span th:text="${order.getId()}"></span></p>
-    <p><strong>Дата создания:</strong> <span th:text="${order.getDate()}"></span></p>
+    <p><strong>Дата создания:</strong> <span th:text="${order.getOrderDate()}"></span></p>
     <p><strong>Покупатель:</strong> <span th:text="${order.getCustomer().getName()}"></span></p>
     <p><strong>Город:</strong> <span th:text="${order.getCity()}"></span></p>
     <p><strong>Адрес:</strong> <span th:text="${order.getAddress()}"></span></p>

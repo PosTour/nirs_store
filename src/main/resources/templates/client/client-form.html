@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Создание клиента</title>
+    <link rel="stylesheet" th:href="@{/css/client.css}">
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Регистрация клиента</h1>
+    </header>
+    <form th:method="POST" th:action="@{/client/add}" th:object="${client}">
+        <div class="form-group">
+            <label for="name">ФИО</label>
+            <input type="text" id="name" name="name" required />
+            <div style="color:red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name Error</div>
+        </div>
+
+        <div class="form-group">
+            <label for="phone">Телефон</label>
+            <input type="text" id="phone" name="phone" required />
+            <div style="color:red" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}">Phone Error</div>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required />
+            <div style="color:red" th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</div>
+        </div>
+
+        <button type="submit" class="submit-btn">Добавить</button>
+    </form>
+
+</div>
+
+</body>
+</html>

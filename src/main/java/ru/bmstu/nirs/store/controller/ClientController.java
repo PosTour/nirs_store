@@ -20,23 +20,23 @@ public class ClientController {
     @GetMapping("/new")
     public String newClient(Model model) {
         model.addAttribute("client", new Client());
-        return "";
+        return "client/client-form";
     }
 
     @PostMapping("/add")
     public String create(@ModelAttribute("client") @Valid Client client,
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "";
+            return "client/client-form";
         }
         clientService.save(client);
-        return "";
+        return "redirect:/client/find_all";
     }
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") int id, Model model) {
-        model.addAttribute("client", clientService.findById(id));
-        return "";
+        model.addAttribute("client", clientService.findById(id).get());
+        return "client/client-edit-form";
     }
 
     @PatchMapping("/update/{id}")
@@ -44,22 +44,28 @@ public class ClientController {
                          @ModelAttribute("client") @Valid Client client,
                          BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "";
+            return "client/client-edit-form";
         }
         clientService.update(id, client);
-        return "";
+        return "redirect:/client/find_all";
     }
 
-    @GetMapping("/{phone}")
+    @GetMapping("phone/{phone}")
     public String findByPhone(@PathVariable("phone") String phone, Model model) {
-        model.addAttribute("client", clientService.findByPhone(phone));
+        model.addAttribute("client", clientService.findByPhone(phone).get());
         return "";
     }
 
     @GetMapping("/find_all")
     public String findAll(Model model) {
         model.addAttribute("clients", clientService.findAll());
-        return "";
+        return "client/client-list";
+    }
+
+    @GetMapping("/{id}")
+    public String findById(@PathVariable("id") int id, Model model) {
+        model.addAttribute("client", clientService.findById(id).get());
+        return "client/client";
     }
 
     @DeleteMapping("/delete/{id}")

@@ -22,7 +22,7 @@ public class User {
     private int id;
 
     @NotEmpty(message = "Поле логина должно быть заполнено")
-    @Size(min = 5, max = 100, message = "Логин содержать от 5 до 100 символов")
+    @Size(min = 2, max = 100, message = "Логин содержать от 5 до 100 символов")
     @Column(name = "username")
     private String username;
 

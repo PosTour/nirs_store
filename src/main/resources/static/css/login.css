@@ -70,6 +70,7 @@ input:focus {
 
 .submit-btn:hover {
     background-color: #00cc55;
+    cursor: pointer;
 }
 
 .error-message {
