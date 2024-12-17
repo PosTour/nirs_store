@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Товары</title>
+    <link rel="stylesheet" th:href="@{/css/item.css}">
+</head>
+<body>
+
+<!-- Header Panel -->
+<header class="header">
+    <div class="title">Cinema World</div>
+    <div class="header-icons">
+        <a href="/cart"><img src="/icons/cart.svg" alt="Cart" class="cart-icon"></a>
+        <a href="/profile"><img src="/icons/user.svg" alt="User" class="user-icon"></a>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <header>
+        <h1>Склад</h1>
+    </header>
+
+    <!-- Filter by Category -->
+    <div class="category-filter">
+        <h2>Фильтр по категориям</h2>
+        <ul>
+            <li>
+                <a th:href="@{/item/find_all}"
+                   th:classappend="${selectedCategoryId == null} ? 'active'"
+                   class="category-link">Все</a>
+            </li>
+            <li th:each="category : ${categories}">
+                <a th:href="@{/item/category/{id}(id=${category.getId()})}"
+                   th:classappend="${category.getId() == selectedCategoryId} ? 'active'"
+                   th:text="${category.getName()}"
+                   class="category-link"></a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Items List -->
+    <div class="items-list">
+        <h2>Доступные товары</h2>
+        <ul>
+            <li th:each="item : ${items}">
+                <a th:href="@{/item/{id}(id=${item.getId()})}" class="item-link">
+                    <span class="name" th:text="${item.getName()}"></span>
+                    <br><span th:text="${item.getPurchasePrice()}"></span> ₽
+                    - <span th:text="${item.getSellingPrice()}"></span> ₽
+                    <br>Остаток: <span th:text="${item.getQuantity()}"></span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Add New Item -->
+    <div class="new-item">
+        <a th:href="@{/item/new}" class="create-item-btn">Добавить новый товар</a>
+    </div>
+</div>
+
+</body>
+</html>

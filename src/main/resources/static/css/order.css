@@ -1,0 +1,63 @@
+/* Общие стили для обеих страниц */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #111;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    color: #fff;
+}
+
+.order-list-container, .order-details-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Специфичные стили для страницы списка заказов */
+.order-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    border-bottom: 1px solid #444;
+    cursor: pointer;
+}
+
+.order-item:hover {
+    background-color: #333;
+}
+
+.order-link {
+    text-decoration: none;
+    color: #00FF66;
+}
+
+.order-info span {
+    font-size: 14px;
+}
+
+/* Специфичные стили для страницы деталей заказа */
+.order-details-container {
+    background-color: #1a1a1a;
+    padding: 40px;
+    border-radius: 8px;
+    width: 80%;
+    margin-top: 30px;
+}
+
+.order-info p {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.order-items ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.order-items li {
+    margin: 10px 0;
+}

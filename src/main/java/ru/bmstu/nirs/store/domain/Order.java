@@ -6,12 +6,13 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 @Entity
-@Table(name = "order")
+@Table(name = "order_table")
 @NoArgsConstructor
 @Getter
 @Setter
@@ -36,6 +37,9 @@ public class Order {
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date orderDate;
+
+    @Column(name = "total_amount", precision = 10, scale = 2)
+    private BigDecimal totalAmount;
 
     @ManyToMany
     @JoinTable(

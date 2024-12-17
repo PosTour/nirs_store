@@ -1,0 +1,228 @@
+/* Global Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #111;
+    color: #fff;
+    height: 100vh;
+}
+
+/* Header */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px;
+    background-color: #111;
+    color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Main Content */
+.container {
+    margin-top: 40px; /* Отступ от шапки */
+    background-color: #1a1a1a;
+    padding: 40px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Title and Header Icons */
+.title {
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.header-icons {
+    display: flex;
+    gap: 30px;
+}
+
+.cart-icon, .user-icon {
+    width: 40px;
+    height: 40px;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+header h1 {
+    font-size: 28px;
+    color: #00FF66;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Category Filter */
+.category-filter h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #00FF66;
+}
+
+.category-filter ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* Items List */
+.items-list ul {
+    margin-bottom: 20px;
+}
+
+.items-list li {
+    margin: 10px 0;
+}
+
+.item-link {
+    text-decoration: none;
+    color: #fff;
+    transition: color 0.3s ease;
+}
+
+.item-link:hover {
+    color: #00FF66;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 15px;
+}
+
+input, textarea {
+    padding: 10px;
+    border: 2px solid #00FF66;
+    border-radius: 4px;
+    background-color: #222;
+    color: #fff;
+    font-size: 16px;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #00FF66;
+}
+
+.submit-btn, .back-btn, .create-item-btn {
+    text-decoration: none;
+    background-color: #00FF66;
+    color: #111;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    text-align: center;
+}
+
+.submit-btn:hover, .back-btn:hover, .create-item-btn:hover {
+    background-color: #00cc55;
+}
+
+.back-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.update-link {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.category-filter {
+    margin-bottom: 20px;
+}
+
+.category-filter h2 {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #00FF66;
+}
+
+.category-filter ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.category-link {
+    text-decoration: none;
+    color: #fff;
+    font-size: 16px;
+    padding: 5px 10px;
+    border: 1px solid #00FF66;
+    border-radius: 4px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    max-width: 150px; /* Максимальная ширина */
+    text-overflow: ellipsis; /* Точки, если текст не помещается */
+    white-space: nowrap; /* Предотвращение переноса текста */
+    overflow: hidden; /* Скрытие лишнего текста */
+    text-align: center;
+}
+
+.category-link.active {
+    background-color: #00FF66;
+    color: #111;
+    font-weight: bold;
+    border-color: #00FF66;
+    pointer-events: none; /* Отключает повторное нажатие */
+    cursor: default;
+}
+
+.category-link:hover {
+    background-color: #00FF66;
+    color: #111;
+}
+
+.name {
+    font-weight: bold;
+    padding-bottom: 5px;
+}
+
+select {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #00FF66;
+    border-radius: 4px;
+    background-color: #222;
+    color: #fff;
+    font-size: 16px;
+    appearance: none; /* Убирает стандартные стрелки браузера */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    position: relative;
+    background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="10" height="6"%3E%3Cpath d="M0 0l5 5 5-5z" fill="%23fff"/%3E%3C/svg%3E');
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 10px 6px;
+}
+
+select:hover {
+    border-color: #00cc55;
+}
+
+select:focus {
+    outline: none;
+    border-color: #00FF66;
+    box-shadow: 0 0 5px #00FF66;
+}
+
+option {
+    background-color: #1a1a1a;
+    color: #fff;
+    font-size: 16px;
+}

@@ -1,0 +1,70 @@
+/* Global Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #111;
+    color: #fff;
+}
+
+a {
+    text-decoration: none;
+    color: white;
+}
+
+/* Header */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 40px; /* Увеличил отступы для большей видимости */
+    background-color: #111;
+    color: #fff;
+}
+
+.title {
+    font-size: 32px; /* Увеличил размер шрифта для названия */
+    font-weight: bold;
+}
+
+.header-icons {
+    display: flex;
+    gap: 30px; /* Увеличил расстояние между иконками */
+}
+
+.cart-icon, .user-icon {
+    width: 40px; /* Увеличил размер иконок */
+    height: 40px;
+}
+
+/* Divider */
+.divider {
+    border: none;
+    border-top: 2px solid #00FF66;
+    margin: 0;
+}
+
+/* Menu Section */
+.menu {
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px; /* Увеличил отступ сверху */
+    padding-left: 140px; /* Увеличил отступ слева */
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Увеличил расстояние между иконкой и текстом */
+    margin: 25px 0; /* Увеличил отступы между элементами */
+}
+
+.menu-icon {
+    width: 50px; /* Увеличил размер иконок меню */
+    height: 50px;
+}
+
+.menu-text {
+    font-size: 24px; /* Увеличил размер шрифта для текста */
+    font-weight: bold;
+}

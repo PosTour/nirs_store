@@ -1,15 +1,16 @@
 package ru.bmstu.nirs.store.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bmstu.nirs.store.domain.Basket;
+import ru.bmstu.nirs.store.domain.Client;
 import ru.bmstu.nirs.store.domain.Item;
 import ru.bmstu.nirs.store.repository.BasketRepository;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -21,6 +22,10 @@ public class BasketService {
     private final ClientService clientService;
     private final ItemService itemService;
     private final JdbcTemplate jdbcTemplate;
+
+    public void save(Client client) {
+        basketRepository.save(new Basket(client));
+    }
 
     @Transactional(readOnly = true)
     public Optional<Basket> findById(int id) {
@@ -101,6 +106,9 @@ public class BasketService {
             jdbcTemplate.update(
                     "UPDATE basket_item SET quantity = quantity + 1 WHERE basket_id=? AND item_id=?",
                     basket.getId(), id);
+            jdbcTemplate.update(
+                    "UPDATE basket SET total_amount = total_amount + ?",
+                    itemService.findById(id).get().getSellingPrice());
         } else {
             jdbcTemplate.update(
                     "INSERT INTO basket_item (basket_id, item_id, quantity) VALUES (?, ?, 1)",
@@ -108,7 +116,16 @@ public class BasketService {
         }
     }
 
-    public void delete(int id) {
-        basketRepository.deleteById(id);
+    public void clear(int id) {
+        var basketOpt = basketRepository.findById(id);
+        if (basketOpt.isPresent()) {
+            var basket = basketOpt.get();
+            basket.setItems(null);
+            basket.setTotalAmount(BigDecimal.ZERO);
+            jdbcTemplate.update(
+                    "DELETE FROM basket_item WHERE basket_id=?",
+                    id);
+            basketRepository.save(basket);
+        }
     }
 }

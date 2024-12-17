@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Детали заказа</title>
+  <link rel="stylesheet" th:href="@{/css/order.css}">
+</head>
+<body>
+
+<div class="order-details-container">
+  <h2 class="order-details-title">Детали заказа</h2>
+
+  <div class="order-info">
+    <p><strong>Идентификатор:</strong> <span th:text="${order.getId()}"></span></p>
+    <p><strong>Дата создания:</strong> <span th:text="${order.getDate()}"></span></p>
+    <p><strong>Покупатель:</strong> <span th:text="${order.getCustomer().getName()}"></span></p>
+    <p><strong>Город:</strong> <span th:text="${order.getCity()}"></span></p>
+    <p><strong>Адрес:</strong> <span th:text="${order.getAddress()}"></span></p>
+    <p><strong>Сумма:</strong> <span th:text="${order.getTotalAmount()}"></span></p>
+  </div>
+
+  <div class="order-items">
+    <h3>Товары:</h3>
+    <ul>
+      <li th:each="entry : ${order.getQuantities()}">
+        <span th:text="${entry.key.getName()}"></span> - <span th:text="${entry.value}"></span> x <span th:text="${entry.value.getPrice()}"></span>
+      </li>
+    </ul>
+  </div>
+</div>
+
+</body>
+</html>

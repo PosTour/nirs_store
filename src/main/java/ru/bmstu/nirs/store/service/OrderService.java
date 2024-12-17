@@ -1,7 +1,6 @@
 package ru.bmstu.nirs.store.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
@@ -25,6 +24,9 @@ public class OrderService {
 
     public void save(Order order, int basketId) {
         order.setOrderDate(new Date());
+        var basket = basketService.findById(basketId).get();
+        basketService.setItemsQuantity(basket);
+        order.setQuantities(basket.getQuantities());
         orderRepository.save(order);
 
         order.getQuantities().forEach((key, value) -> {
@@ -34,7 +36,7 @@ public class OrderService {
                     value, order.getId(), key.getId());
         });
 
-        basketService.delete(basketId);
+        basketService.clear(basketId);
     }
 
     @Transactional(readOnly = true)

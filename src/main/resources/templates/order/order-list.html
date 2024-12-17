@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order List</title>
+    <link rel="stylesheet" th:href="@{/css/order.css}">
+</head>
+<body>
+
+<div class="order-list-container">
+    <h2 class="order-list-title">Заказы</h2>
+
+    <div th:if="${orders.isEmpty()}" class="no-orders-message">
+        Пока что нет заказов.
+    </div>
+
+    <div th:each="order : ${orders}" class="order-item">
+        <a th:href="@{/order/{id}(id=${order.getId()})}" class="order-link">
+            <div class="order-info">
+                <span class="order-date">Дата создания: <span th:text="${order.getDate()}"></span></span>
+                <span class="order-status">Покупатель: <span th:text="${order.getCustomer().getName()}"></span></span>
+                <span class="order-id">Сумма: <span th:text="${order.getTotalAmount()}"></span></span>
+            </div>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

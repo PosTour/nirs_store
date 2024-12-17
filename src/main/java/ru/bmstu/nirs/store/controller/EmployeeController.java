@@ -10,6 +10,6 @@ public class EmployeeController {
 
     @GetMapping("/dashboard")
     public String dashboard() {
-        return "employee-dashboard";
+        return "dashboard/employee-dashboard";
     }
 }

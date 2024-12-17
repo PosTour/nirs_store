@@ -1,7 +1,6 @@
 package ru.bmstu.nirs.store.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -47,7 +46,7 @@ public class OrderController {
     @GetMapping("/find_all")
     public String findAll(Model model) {
         model.addAttribute("orders", orderService.findAll());
-        return "";
+        return "order-list";
     }
 
     @GetMapping("/edit/{id}")
