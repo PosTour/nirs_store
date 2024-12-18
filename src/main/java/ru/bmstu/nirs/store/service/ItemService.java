@@ -1,7 +1,6 @@
 package ru.bmstu.nirs.store.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bmstu.nirs.store.domain.Item;
