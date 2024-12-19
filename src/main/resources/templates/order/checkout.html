@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оформление заказа</title>
+    <link rel="stylesheet" href="/css/item.css">
+</head>
+<body>
+<header class="header">
+    <h1>Оформление заказа</h1>
+</header>
+<div class="container">
+    <form th:action="@{/order/add}" th:method="POST">
+        <div class="form-group">
+            <label for="phone">Номер клиента:</label>
+            <input type="text" id="phone" name="phone" placeholder="Введите номер клиента" required>
+        </div>
+
+        <div class="form-group">
+            <label for="city">Город:</label>
+            <input type="text" id="city" name="city" placeholder="Введите город" required>
+        </div>
+
+        <div class="form-group">
+            <label for="address">Адрес:</label>
+            <textarea id="address" name="address" rows="3" placeholder="Введите адрес" required></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">Подтвердить заказ</button>
+    </form>
+</div>
+</body>
+</html>

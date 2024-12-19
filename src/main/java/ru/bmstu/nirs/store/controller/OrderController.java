@@ -15,17 +15,16 @@ public class OrderController {
     private final OrderService orderService;
 
     @GetMapping("/new")
-    public String newOrder(Model model, @ModelAttribute("basket_id") int basketId) {
-        model.addAttribute("order", new Order());
-        model.addAttribute("basket_id", basketId);
-        return "";
+    public String newOrder() {
+        return "order/checkout";
     }
 
     @PostMapping("/add")
-    public String create(@ModelAttribute("order") Order order,
-                         @ModelAttribute("basket_id") int basketId) {
-        orderService.save(order, basketId);
-        return "";
+    public String create(@RequestParam("phone") String phone,
+                         @RequestParam("city") String city,
+                         @RequestParam("address") String address) {
+        orderService.save(phone, city, address);
+        return "redirect:/order/find_all";
     }
 
     @GetMapping("/{id}")

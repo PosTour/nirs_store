@@ -11,7 +11,7 @@
 <header class="header">
   <div class="title">Cinema World</div>
   <div class="header-icons">
-    <a href="/cart"><img src="/icons/cart.svg" alt="Cart" class="cart-icon"></a>
+    <a href="/basket"><img src="/icons/cart.svg" alt="Cart" class="cart-icon"></a>
     <a href="/auth/lks"><img src="/icons/user.svg" alt="User" class="user-icon"></a>
   </div>
 </header>
@@ -34,7 +34,7 @@
     <h3>Товары:</h3>
     <ul>
       <li th:each="entry : ${order.getQuantities()}">
-        <span th:text="${entry.key.getName()}"></span> - <span th:text="${entry.value}"></span> x <span th:text="${entry.value.getPrice()}"></span>
+        <span th:text="${entry.key.getName()}"></span> - <span th:text="${entry.value}"></span> x <span th:text="${entry.key.getSellingPrice()}"></span> ₽
       </li>
     </ul>
   </div>

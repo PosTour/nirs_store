@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина</title>
+    <link rel="stylesheet" href="/css/item.css">
+</head>
+<body>
+<header class="header">
+    <h1>Корзина</h1>
+</header>
+<div class="container">
+    <ul>
+        <li th:each="entry : ${basket.getQuantities()}" class="basket-item">
+            <div class="name" th:text="${entry.key.getName()}">Название товара</div>
+            <div>Цена: <span th:text="${entry.key.getSellingPrice()}">0</span> ₽</div>
+            <div>
+                Количество:
+                <form th:action="@{/basket/update/{itemId}(itemId=${entry.key.getId})}" th:method="POST">
+                    <input type="number" name="quantity" min="1" th:value="${entry.value}" required>
+                    <button type="submit" class="update-link">Обновить</button>
+                </form>
+            </div>
+        </li>
+    </ul>
+    <div class="total">
+        <strong>Общая сумма: <span th:text="${basket.getTotalAmount}">0</span> ₽</strong>
+    </div>
+    <a href="/order/new" class="submit-btn">Оформить заказ</a>
+</div>
+</body>
+</html>

@@ -51,10 +51,11 @@ public class Order {
     @Transient
     private Map<Item, Integer> quantities;
 
-    public Order(Client customerId, String city, String address, Date orderDate) {
+    public Order(Client customerId, String city, String address, Date orderDate, BigDecimal totalAmount) {
         this.customer = customerId;
         this.city = city;
         this.address = address;
         this.orderDate = orderDate;
+        this.totalAmount = totalAmount;
     }
 }

@@ -53,10 +53,12 @@ public class BasketService {
         Map<Item, Integer> quantities = new HashMap<>();
 
         basket.getItems().forEach(item -> {
-            var quantity = jdbcTemplate.query("SELECT FROM basket_item WHERE basket_id=? AND item_id=?",
+            var quantity = jdbcTemplate.queryForObject(
+                    "SELECT quantity FROM basket_item WHERE basket_id = ? AND item_id = ?",
                     new Object[]{basketId, item.getId()},
-                    new BeanPropertyRowMapper<>(Integer.class)).getFirst();
-            quantities.put(item, quantity);
+                    Integer.class
+            );
+            quantities.put(item, quantity != null ? quantity : 0);
         });
 
         basket.setQuantities(quantities);
@@ -103,26 +105,42 @@ public class BasketService {
     }
 
     public void addItem(int id) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        var basketOpt = getCurrentBasket();
 
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
-            String username = authentication.getName();
-            User user = userRepository.findUserByUsername(username).get();
-            var basket = basketRepository.findBasketByUser(user).get();
-
+        if (basketOpt.isPresent()) {
+            var basket = basketOpt.get();
             if (basket.getItems().stream().anyMatch(basketItem -> basketItem.getId() == id)) {
                 jdbcTemplate.update(
                         "UPDATE basket_item SET quantity = quantity + 1 WHERE basket_id=? AND item_id=?",
                         basket.getId(), id);
-                jdbcTemplate.update(
-                        "UPDATE basket SET total_amount = total_amount + ?",
-                        itemService.findById(id).get().getSellingPrice());
             } else {
                 jdbcTemplate.update(
                         "INSERT INTO basket_item (basket_id, item_id, quantity) VALUES (?, ?, 1)",
                         basket.getId(), id);
             }
+            basket.setTotalAmount(basket.getTotalAmount().add(itemService.findById(id).get().getSellingPrice()));
         }
+    }
+
+    public void updateItemQuantity(int itemId, int quantity) {
+        var basketOpt = getCurrentBasket();
+        if (basketOpt.isPresent()) {
+            var basket = basketOpt.get();
+            var item = itemService.findById(itemId).get();
+            setItemsQuantity(basket);
+            var prevQuantity = basket.getQuantities().get(item);
+
+            jdbcTemplate.update(
+                    "UPDATE basket_item SET quantity = ? WHERE basket_id=? AND item_id=?",
+                    quantity, basket.getId(), itemId);
+            if (prevQuantity > quantity) {
+                basket.setTotalAmount(basket.getTotalAmount().subtract(item.getSellingPrice().multiply(BigDecimal.valueOf(prevQuantity - quantity))));
+            } else {
+                basket.setTotalAmount(basket.getTotalAmount().add(item.getSellingPrice().multiply(BigDecimal.valueOf(quantity - prevQuantity))));
+            }
+            basketRepository.save(basket);
+        }
+
     }
 
     public void clear(int id) {
@@ -136,5 +154,16 @@ public class BasketService {
                     id);
             basketRepository.save(basket);
         }
+    }
+
+    public Optional<Basket> getCurrentBasket() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            String username = authentication.getName();
+            User user = userRepository.findUserByUsername(username).get();
+            return basketRepository.findBasketByUser(user);
+        }
+        return Optional.empty();
     }
 }

@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.bmstu.nirs.store.domain.Basket;
 import ru.bmstu.nirs.store.service.BasketService;
 
 @Controller
@@ -13,6 +12,15 @@ import ru.bmstu.nirs.store.service.BasketService;
 public class BasketController {
 
     private final BasketService basketService;
+
+    @GetMapping
+    public String viewBasket(Model model) {
+        var basket = basketService.getCurrentBasket();
+        basket.ifPresent(basketService::setItemsQuantity);
+
+        model.addAttribute("basket", basket.get());
+        return "order/basket";
+    }
 
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") int id, Model model) {
@@ -38,10 +46,10 @@ public class BasketController {
         return "";
     }
 
-    @PatchMapping("/update/{id}")
-    public String update(@PathVariable("id") int id, @ModelAttribute("basket") Basket basket) {
-        basketService.update(id, basket);
-        return "";
+    @PostMapping("/update/{itemId}")
+    public String updateItemQuantity(@PathVariable int itemId, @RequestParam int quantity) {
+        basketService.updateItemQuantity(itemId, quantity);
+        return "redirect:/basket";
     }
 
     @PostMapping("/add_item/{id}")

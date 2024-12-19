@@ -22,21 +22,27 @@ public class OrderService {
     private final JdbcTemplate jdbcTemplate;
     private final BasketService basketService;
 
-    public void save(Order order, int basketId) {
-        order.setOrderDate(new Date());
-        var basket = basketService.findById(basketId).get();
+    public void save(String phone, String city, String address) {
+        var basket = basketService.getCurrentBasket().get();
         basketService.setItemsQuantity(basket);
+
+        var order = new Order(clientService.findByPhone(phone).get(),
+                city,
+                address,
+                new Date(),
+                basket.getTotalAmount());
+
         order.setQuantities(basket.getQuantities());
         orderRepository.save(order);
 
         order.getQuantities().forEach((key, value) -> {
             itemService.decreaseStock(key.getId(), value);
             jdbcTemplate.update(
-                    "UPDATE order_item SET quantity=? WHERE order_id=? AND item_id=?",
-                    value, order.getId(), key.getId());
+                    "INSERT INTO order_item (order_id, item_id, quantity) VALUES (?, ?, ?)",
+                    order.getId(), key.getId(), value);
         });
 
-        basketService.clear(basketId);
+        basketService.clear(basket.getId());
     }
 
     @Transactional(readOnly = true)
@@ -61,10 +67,12 @@ public class OrderService {
         Map<Item, Integer> quantities = new HashMap<>();
 
         order.getItems().forEach(item -> {
-            var quantity = jdbcTemplate.query("SELECT FROM order_item WHERE order_id=? AND item_id=?",
+            var quantity = jdbcTemplate.queryForObject(
+                    "SELECT quantity FROM order_item WHERE order_id=? AND item_id=?",
                     new Object[]{orderId, item.getId()},
-                    new BeanPropertyRowMapper<>(Integer.class)).getFirst();
-            quantities.put(item, quantity);
+                    Integer.class
+            );
+            quantities.put(item, quantity != null ? quantity : 0);
         });
 
         order.setQuantities(quantities);

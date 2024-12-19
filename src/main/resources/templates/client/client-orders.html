@@ -10,7 +10,7 @@
     <header class="header">
         <div class="title">Cinema World</div>
         <div class="header-icons">
-            <a href="/cart"><img src="/icons/cart.svg" alt="Cart" class="cart-icon"></a>
+            <a href="/basket"><img src="/icons/cart.svg" alt="Cart" class="cart-icon"></a>
             <a href="/auth/lks"><img src="/icons/user.svg" alt="User" class="user-icon"></a>
         </div>
     </header>
@@ -28,7 +28,7 @@
             <a th:href="@{/order/{id}(id=${order.getId()})}" class="order-link">
                 <div class="order-info">
                     <span class="order-date">Дата создания: <span th:text="${order.getOrderDate()}"></span></span>
-                    <span class="order-id">Сумма: <span th:text="${order.getTotalAmount()}"></span></span>
+                    <span class="order-id">Сумма: <span th:text="${order.getTotalAmount()}">1500</span> ₽</span>
                 </div>
             </a>
         </div>
