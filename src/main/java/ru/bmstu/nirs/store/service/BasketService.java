@@ -3,12 +3,16 @@ package ru.bmstu.nirs.store.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bmstu.nirs.store.domain.Basket;
-import ru.bmstu.nirs.store.domain.Client;
 import ru.bmstu.nirs.store.domain.Item;
+import ru.bmstu.nirs.store.domain.User;
 import ru.bmstu.nirs.store.repository.BasketRepository;
+import ru.bmstu.nirs.store.repository.UserRepository;
 
 import java.math.BigDecimal;
 import java.util.*;
@@ -19,13 +23,10 @@ import java.util.*;
 public class BasketService {
 
     private final BasketRepository basketRepository;
-    private final ClientService clientService;
+    private final UserService userService;
     private final ItemService itemService;
     private final JdbcTemplate jdbcTemplate;
-
-    public void save(Client client) {
-        basketRepository.save(new Basket(client));
-    }
+    private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
     public Optional<Basket> findById(int id) {
@@ -33,14 +34,14 @@ public class BasketService {
     }
 
     @Transactional(readOnly = true)
-    public Basket findByClientId(int id) {
-        var client = clientService.findById(id);
-        var basket = basketRepository.findBasketByCustomer(client.get());
+    public Basket findByUserId(int id) {
+        var user = userService.findById(id);
+        var basket = basketRepository.findBasketByUser(user.get());
 
         if (basket.isPresent()) {
             return basket.get();
         } else {
-            var newBasket = new Basket(client.get());
+            var newBasket = new Basket(user.get());
             basketRepository.save(newBasket);
             return newBasket;
         }
@@ -101,18 +102,26 @@ public class BasketService {
         }
     }
 
-    public void addItem(int id, Basket basket) {
-        if (basket.getItems().stream().anyMatch(basketItem -> basketItem.getId() == id)) {
-            jdbcTemplate.update(
-                    "UPDATE basket_item SET quantity = quantity + 1 WHERE basket_id=? AND item_id=?",
-                    basket.getId(), id);
-            jdbcTemplate.update(
-                    "UPDATE basket SET total_amount = total_amount + ?",
-                    itemService.findById(id).get().getSellingPrice());
-        } else {
-            jdbcTemplate.update(
-                    "INSERT INTO basket_item (basket_id, item_id, quantity) VALUES (?, ?, 1)",
-                    basket.getId(), id);
+    public void addItem(int id) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
+            String username = authentication.getName();
+            User user = userRepository.findUserByUsername(username).get();
+            var basket = basketRepository.findBasketByUser(user).get();
+
+            if (basket.getItems().stream().anyMatch(basketItem -> basketItem.getId() == id)) {
+                jdbcTemplate.update(
+                        "UPDATE basket_item SET quantity = quantity + 1 WHERE basket_id=? AND item_id=?",
+                        basket.getId(), id);
+                jdbcTemplate.update(
+                        "UPDATE basket SET total_amount = total_amount + ?",
+                        itemService.findById(id).get().getSellingPrice());
+            } else {
+                jdbcTemplate.update(
+                        "INSERT INTO basket_item (basket_id, item_id, quantity) VALUES (?, ?, 1)",
+                        basket.getId(), id);
+            }
         }
     }
 
@@ -121,7 +130,7 @@ public class BasketService {
         if (basketOpt.isPresent()) {
             var basket = basketOpt.get();
             basket.setItems(null);
-            basket.setTotalAmount(BigDecimal.ZERO);
+            basket.setTotalAmount(BigDecimal.valueOf(0));
             jdbcTemplate.update(
                     "DELETE FROM basket_item WHERE basket_id=?",
                     id);

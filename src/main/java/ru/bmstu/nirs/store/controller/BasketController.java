@@ -23,9 +23,9 @@ public class BasketController {
         return "";
     }
 
-    @GetMapping("/find_by_client_id/{id}")
-    public String findByClientId(@PathVariable("id") int id, Model model) {
-        model.addAttribute("basket", basketService.findByClientId(id));
+    @GetMapping("/user/{id}")
+    public String findByUserId(@PathVariable("id") int id, Model model) {
+        model.addAttribute("basket", basketService.findByUserId(id));
         return "";
     }
 
@@ -44,8 +44,9 @@ public class BasketController {
         return "";
     }
 
-    @PatchMapping("/add_item/{id}")
-    public void addItem(@PathVariable("id") int id, @ModelAttribute("basket") Basket basket) {
-        basketService.addItem(id, basket);
+    @PostMapping("/add_item/{id}")
+    @ResponseBody
+    public void addItem(@PathVariable("id") int id) {
+        basketService.addItem(id);
     }
 }

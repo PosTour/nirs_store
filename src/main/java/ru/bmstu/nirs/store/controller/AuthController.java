@@ -32,7 +32,7 @@ public class AuthController {
     public String lks(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails userDetails) {
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
             String username = authentication.getName();
             User user = userRepository.findUserByUsername(username).get();
 

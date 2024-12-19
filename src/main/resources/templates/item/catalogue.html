@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    <title>Каталог</title>
+    <link rel="stylesheet" th:href="@{/css/item.css}">
+</head>
+<body>
+
+<!-- Header Panel -->
+<header class="header">
+    <div class="title">Cinema World</div>
+    <div class="header-icons">
+        <a href="/cart"><img src="/icons/cart.svg" alt="Cart" class="cart-icon"></a>
+        <a href="/auth/lks"><img src="/icons/user.svg" alt="User" class="user-icon"></a>
+    </div>
+</header>
+
+<!-- Main Content -->
+<div class="container">
+    <header>
+        <h1>Каталог</h1>
+    </header>
+
+    <!-- Filter by Category -->
+    <div class="category-filter">
+        <h2>Фильтр по категориям</h2>
+        <ul>
+            <li>
+                <a th:href="@{/item/catalogue}"
+                   th:classappend="${selectedCategoryId == null} ? 'active'"
+                   class="category-link">Все</a>
+            </li>
+            <li th:each="category : ${categories}">
+                <a th:href="@{/item/catalogue/category/{id}(id=${category.getId()})}"
+                   th:classappend="${category.getId() == selectedCategoryId} ? 'active'"
+                   th:text="${category.getName()}"
+                   class="category-link"></a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Items List -->
+    <div class="items-list">
+        <h2>Доступные товары</h2>
+        <ul>
+            <li th:each="item : ${items}">
+                <div class="item-entry">
+                    <a th:href="@{/item/{id}(id=${item.getId()})}" class="item-link">
+                        <span class="name" th:text="${item.getName()}"></span>
+                        <br><span th:text="${item.getPurchasePrice()}"></span> ₽
+                        - <span th:text="${item.getSellingPrice()}"></span> ₽
+                        <br>Остаток: <span th:text="${item.getQuantity()}"></span>
+                    </a>
+                    <!-- Add to Cart Button -->
+                    <button th:onclick="'addToCart(' + ${item.getId()} + ')'" class="add-to-cart-btn">Добавить</button>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<script>
+    function addToCart(itemId) {
+        const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+        const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+        fetch(`/basket/add_item/${itemId}`, {
+            method: 'POST',
+            headers: {
+                [csrfHeader]: csrfToken
+            }
+        })
+            .then(response => {
+                if (response.ok) {
+                    alert('Товар добавлен в корзину!');
+                } else {
+                    alert('Ошибка добавления товара.');
+                }
+            })
+            .catch(() => alert('Ошибка сети.'));
+    }
+</script>
+
+</body>
+</html>

@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.bmstu.nirs.store.domain.Basket;
 import ru.bmstu.nirs.store.domain.User;
+import ru.bmstu.nirs.store.repository.BasketRepository;
 import ru.bmstu.nirs.store.repository.UserRepository;
 
 import java.util.List;
@@ -17,11 +19,13 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final BasketRepository basketRepository;
 
     public void save(User user) {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
         userRepository.save(user);
+        basketRepository.save(new Basket(user));
     }
 
     @Transactional(readOnly = true)

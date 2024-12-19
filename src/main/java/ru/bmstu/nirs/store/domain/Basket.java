@@ -23,7 +23,7 @@ public class Basket {
 
     @ManyToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
-    private Client customer;
+    private User user;
 
     @Column(name = "total_amount", precision = 10, scale = 2)
     private BigDecimal totalAmount;
@@ -38,7 +38,8 @@ public class Basket {
     @Transient
     private Map<Item, Integer> quantities;
 
-    public Basket(Client customer) {
-        this.customer = customer;
+    public Basket(User user) {
+        this.user = user;
+        this.totalAmount = BigDecimal.valueOf(0);
     }
 }

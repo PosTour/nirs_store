@@ -77,6 +77,22 @@ public class ItemController {
         return "item/item-list";
     }
 
+    @GetMapping("/catalogue")
+    public String catalogue(Model model) {
+        model.addAttribute("items", itemService.findAll().stream().filter(item -> item.getQuantity() != 0));
+        model.addAttribute("categories", categoryService.findAll());
+        model.addAttribute("selectedCategoryId", null);
+        return "item/catalogue";
+    }
+
+    @GetMapping("/catalogue/category/{id}")
+    public String catalogueByCategoryId(@PathVariable("id") int id, Model model) {
+        model.addAttribute("items", itemService.findByCategoryId(id));
+        model.addAttribute("categories", categoryService.findAll());
+        model.addAttribute("selectedCategoryId", id);
+        return "item/catalogue";
+    }
+
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") int id, Model model) {
         model.addAttribute("item", itemService.findById(id).get());
