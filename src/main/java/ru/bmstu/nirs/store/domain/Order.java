@@ -38,9 +38,6 @@ public class Order {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date orderDate;
 
-    @Column(name = "total_amount", precision = 10, scale = 2)
-    private BigDecimal totalAmount;
-
     @ManyToMany
     @JoinTable(
             name = "order_item",
@@ -51,11 +48,13 @@ public class Order {
     @Transient
     private Map<Item, Integer> quantities;
 
-    public Order(Client customerId, String city, String address, Date orderDate, BigDecimal totalAmount) {
+    @Transient
+    private BigDecimal totalAmount;
+
+    public Order(Client customerId, String city, String address, Date orderDate) {
         this.customer = customerId;
         this.city = city;
         this.address = address;
         this.orderDate = orderDate;
-        this.totalAmount = totalAmount;
     }
 }

@@ -9,6 +9,7 @@ import ru.bmstu.nirs.store.domain.Item;
 import ru.bmstu.nirs.store.domain.Order;
 import ru.bmstu.nirs.store.repository.OrderRepository;
 
+import java.math.BigDecimal;
 import java.util.*;
 
 @Service
@@ -23,14 +24,13 @@ public class OrderService {
     private final BasketService basketService;
 
     public void save(String phone, String city, String address) {
-        var basket = basketService.getCurrentBasket().get();
+        var basket = basketService.getCurrentBasket();
         basketService.setItemsQuantity(basket);
 
         var order = new Order(clientService.findByPhone(phone).get(),
                 city,
                 address,
-                new Date(),
-                basket.getTotalAmount());
+                new Date());
 
         order.setQuantities(basket.getQuantities());
         orderRepository.save(order);
@@ -46,19 +46,26 @@ public class OrderService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<Order> findById(int id) {
-        return orderRepository.findById(id);
+    public Order findById(int id) {
+        var order = orderRepository.findById(id).get();
+        setItemsQuantity(order);
+        setTotalAmount(order);
+        return order;
     }
 
     @Transactional(readOnly = true)
     public List<Order> findAllByClientId(int id) {
         var client = clientService.findById(id);
-        return orderRepository.findOrdersByCustomer(client.get());
+        var orders = orderRepository.findOrdersByCustomer(client.get());
+        orders.forEach(this::setTotalAmount);
+        return orders;
     }
 
     @Transactional(readOnly = true)
     public List<Order> findAll() {
-        return orderRepository.findAll();
+        var orders = orderRepository.findAll();
+        orders.forEach(this::setTotalAmount);
+        return orders;
     }
 
     @Transactional(readOnly = true)
@@ -117,6 +124,19 @@ public class OrderService {
 
             orderRepository.save(updatedOrder);
         }
+    }
+
+    @Transactional(readOnly = true)
+    public void setTotalAmount(Order order) {
+        order.setTotalAmount(BigDecimal.ZERO);
+        order.getItems().forEach(item -> {
+            var quantity = jdbcTemplate.queryForObject(
+                    "SELECT quantity FROM order_item WHERE order_id=? AND item_id=?",
+                    new Object[]{order.getId(), item.getId()},
+                    Integer.class
+            );
+            order.setTotalAmount(order.getTotalAmount().add(item.getSellingPrice().multiply(BigDecimal.valueOf(quantity))));
+        });
     }
 
     public void delete(int id) {

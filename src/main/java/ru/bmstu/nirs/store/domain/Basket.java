@@ -25,9 +25,6 @@ public class Basket {
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private User user;
 
-    @Column(name = "total_amount", precision = 10, scale = 2)
-    private BigDecimal totalAmount;
-
     @ManyToMany
     @JoinTable(
             name = "basket_item",
@@ -38,8 +35,10 @@ public class Basket {
     @Transient
     private Map<Item, Integer> quantities;
 
+    @Transient
+    private BigDecimal totalAmount;
+
     public Basket(User user) {
         this.user = user;
-        this.totalAmount = BigDecimal.valueOf(0);
     }
 }

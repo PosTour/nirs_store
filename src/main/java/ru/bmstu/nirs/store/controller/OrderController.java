@@ -29,10 +29,7 @@ public class OrderController {
 
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") int id, Model model) {
-        var order = orderService.findById(id);
-        order.ifPresent(orderService::setItemsQuantity);
-
-        model.addAttribute("order", order.get());
+        model.addAttribute("order", orderService.findById(id));
         return "order/order";
     }
 
@@ -50,10 +47,7 @@ public class OrderController {
 
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") int id, Model model) {
-        var order = orderService.findById(id);
-        order.ifPresent(orderService::setItemsQuantity);
-
-        model.addAttribute("order", order.get());
+        model.addAttribute("order", orderService.findById(id));
         return "";
     }
 

@@ -1,11 +1,13 @@
-/* Global Styles */
+/* Общие стили */
 body {
     margin: 0;
     padding: 0;
     font-family: Arial, sans-serif;
     background-color: #111;
     color: #fff;
-    height: 100vh;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Header */
@@ -16,61 +18,84 @@ body {
     padding: 20px 40px;
     background-color: #111;
     color: #fff;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
-/* Main Content */
-.container {
-    margin-top: 40px; /* Отступ от шапки */
-    background-color: #1a1a1a;
-    padding: 40px;
-    border-radius: 8px;
-    width: 100%;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-/* Title and Header Icons */
 .title {
     font-size: 32px;
     font-weight: bold;
+    color: white;
 }
 
 .header-icons {
     display: flex;
-    gap: 30px;
+    gap: 20px;
 }
 
 .cart-icon, .user-icon {
     width: 40px;
     height: 40px;
+    transition: transform 0.3s ease;
 }
 
-a {
-    text-decoration: none;
-    color: white;
+.cart-icon:hover, .user-icon:hover {
+    transform: scale(1.1);
 }
 
+/* Основной контейнер */
+.container {
+    margin: 40px auto;
+    background-color: #1a1a1a;
+    padding: 40px;
+    border-radius: 12px;
+    max-width: 800px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+    text-align: center;
+}
+
+/* Заголовки */
 header h1 {
     font-size: 28px;
     color: #00FF66;
-    text-align: center;
     margin-bottom: 20px;
 }
 
-/* Client List */
-.clients-list ul {
+header h2 {
+    font-size: 24px;
+    color: #00FF66;
     margin-bottom: 20px;
+}
+
+/* Список клиентов */
+.clients-list ul {
+    list-style: none;
+    padding: 0;
 }
 
 .clients-list li {
-    margin: 10px 0;
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #222;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.clients-list li:hover {
+    background-color: #333;
+    transform: scale(1.02);
 }
 
 .client-link {
     text-decoration: none;
-    color: #fff;
+    color: #FFD700;
+    font-size: 18px;
+    font-weight: bold;
     transition: color 0.3s ease;
 }
 
@@ -78,20 +103,70 @@ header h1 {
     color: #00FF66;
 }
 
-.form-group {
+/* Кнопки */
+button, .create-client-btn, .submit-btn, .back-btn {
+    text-decoration: none;
+    background-color: #00FF66;
+    color: #111;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    border: none;
+    display: inline-block;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+button, .back-btn, .submit-btn {
+    display: inline-flex; /* Гарантирует, что текст выравнен одинаково */
+    align-items: center; /* Вертикальное выравнивание текста */
+    justify-content: center; /* Горизонтальное выравнивание текста */
+    text-decoration: none; /* Убирает подчеркивание для ссылок */
+    background-color: #00FF66;
+    color: #111;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover, .back-btn:hover, .submit-btn:hover {
+    background-color: #00cc55;
+    transform: scale(1.05);
+}
+
+
+button:hover, .create-client-btn:hover, .submit-btn:hover, .back-btn:hover {
+    background-color: #00cc55;
+    transform: scale(1.05);
+}
+
+/* Форма */
+form {
     display: flex;
     flex-direction: column;
-    gap: 5px;
-    margin-bottom: 15px;
+    gap: 15px;
+    text-align: left;
+}
+
+label {
+    font-size: 16px;
+    color: #ddd;
 }
 
 input, textarea {
     padding: 10px;
-    border: 2px solid #00FF66;
-    border-radius: 4px;
+    border: 2px solid #333;
+    border-radius: 6px;
     background-color: #222;
     color: #fff;
     font-size: 16px;
+    transition: border-color 0.3s ease;
 }
 
 input:focus, textarea:focus {
@@ -99,30 +174,77 @@ input:focus, textarea:focus {
     border-color: #00FF66;
 }
 
-.submit-btn, .back-btn, .create-client-btn {
-    text-decoration: none;
+/* Ошибки */
+div[th\\:if] {
+    font-size: 14px;
+    color: #FF5555;
+}
+
+/* Ссылки "Назад" */
+.back-link {
+    margin-top: 20px;
+}
+
+.back-btn {
+    margin-top: 10px;
     background-color: #00FF66;
     color: #111;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 16px;
-    font-weight: bold;
-    transition: background-color 0.3s ease;
-    display: inline-block;
-    text-align: center;
 }
 
-.submit-btn:hover, .back-btn:hover, .create-client-btn:hover {
+.back-btn:hover {
     background-color: #00cc55;
-    cursor: pointer;
 }
 
-.back-link {
-    text-align: center;
-    margin-top: 20px;
+/* Детали клиента */
+.client-details p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin: 10px 0;
+    text-align: left;
+}
+
+.client-details p strong {
+    color: #FFD700;
 }
 
 .update-link {
-    text-align: center;
     margin-top: 20px;
+}
+
+/* Адаптивность */
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+    }
+
+    header h1 {
+        font-size: 24px;
+    }
+
+    .clients-list li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .header-icons {
+        gap: 10px;
+    }
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 16px;
+    color: #ddd;
+    margin-bottom: 5px;
+}
+
+a {
+    text-decoration: none;
+    color: white;
 }

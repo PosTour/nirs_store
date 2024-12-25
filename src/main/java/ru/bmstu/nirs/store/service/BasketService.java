@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.bmstu.nirs.store.domain.Basket;
 import ru.bmstu.nirs.store.domain.Item;
+import ru.bmstu.nirs.store.domain.Order;
 import ru.bmstu.nirs.store.domain.User;
 import ru.bmstu.nirs.store.repository.BasketRepository;
 import ru.bmstu.nirs.store.repository.UserRepository;
@@ -29,20 +30,35 @@ public class BasketService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public Optional<Basket> findById(int id) {
-        return basketRepository.findById(id);
+    public Basket viewBasket() {
+        var basket = getCurrentBasket();
+        setItemsQuantity(basket);
+        setTotalAmount(basket);
+        return basket;
+    }
+
+    @Transactional(readOnly = true)
+    public Basket findById(int id) {
+        var basket = basketRepository.findById(id).get();
+        setItemsQuantity(basket);
+        setTotalAmount(basket);
+        return basket;
     }
 
     @Transactional(readOnly = true)
     public Basket findByUserId(int id) {
         var user = userService.findById(id);
-        var basket = basketRepository.findBasketByUser(user.get());
+        var basketOpt = basketRepository.findBasketByUser(user.get());
 
-        if (basket.isPresent()) {
-            return basket.get();
+        if (basketOpt.isPresent()) {
+            var basket = basketOpt.get();
+            setItemsQuantity(basket);
+            setTotalAmount(basket);
+            return basket;
         } else {
             var newBasket = new Basket(user.get());
             basketRepository.save(newBasket);
+            newBasket.setTotalAmount(BigDecimal.ZERO);
             return newBasket;
         }
     }
@@ -62,6 +78,19 @@ public class BasketService {
         });
 
         basket.setQuantities(quantities);
+    }
+
+    @Transactional(readOnly = true)
+    public void setTotalAmount(Basket basket) {
+        basket.setTotalAmount(BigDecimal.ZERO);
+        basket.getItems().forEach(item -> {
+            var quantity = jdbcTemplate.queryForObject(
+                    "SELECT quantity FROM basket_item WHERE basket_id=? AND item_id=?",
+                    new Object[]{basket.getId(), item.getId()},
+                    Integer.class
+            );
+            basket.setTotalAmount(basket.getTotalAmount().add(item.getSellingPrice().multiply(BigDecimal.valueOf(quantity))));
+        });
     }
 
     public void update(int id, Basket updatedBasket) {
@@ -105,10 +134,9 @@ public class BasketService {
     }
 
     public void addItem(int id) {
-        var basketOpt = getCurrentBasket();
+        var basket = getCurrentBasket();
 
-        if (basketOpt.isPresent()) {
-            var basket = basketOpt.get();
+        if (basket != null) {
             if (basket.getItems().stream().anyMatch(basketItem -> basketItem.getId() == id)) {
                 jdbcTemplate.update(
                         "UPDATE basket_item SET quantity = quantity + 1 WHERE basket_id=? AND item_id=?",
@@ -118,26 +146,17 @@ public class BasketService {
                         "INSERT INTO basket_item (basket_id, item_id, quantity) VALUES (?, ?, 1)",
                         basket.getId(), id);
             }
-            basket.setTotalAmount(basket.getTotalAmount().add(itemService.findById(id).get().getSellingPrice()));
         }
     }
 
     public void updateItemQuantity(int itemId, int quantity) {
-        var basketOpt = getCurrentBasket();
-        if (basketOpt.isPresent()) {
-            var basket = basketOpt.get();
-            var item = itemService.findById(itemId).get();
+        var basket = getCurrentBasket();
+        if (basket != null) {
             setItemsQuantity(basket);
-            var prevQuantity = basket.getQuantities().get(item);
 
             jdbcTemplate.update(
                     "UPDATE basket_item SET quantity = ? WHERE basket_id=? AND item_id=?",
                     quantity, basket.getId(), itemId);
-            if (prevQuantity > quantity) {
-                basket.setTotalAmount(basket.getTotalAmount().subtract(item.getSellingPrice().multiply(BigDecimal.valueOf(prevQuantity - quantity))));
-            } else {
-                basket.setTotalAmount(basket.getTotalAmount().add(item.getSellingPrice().multiply(BigDecimal.valueOf(quantity - prevQuantity))));
-            }
             basketRepository.save(basket);
         }
 
@@ -156,14 +175,15 @@ public class BasketService {
         }
     }
 
-    public Optional<Basket> getCurrentBasket() {
+    public Basket getCurrentBasket() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null && authentication.getPrincipal() instanceof UserDetails) {
             String username = authentication.getName();
             User user = userRepository.findUserByUsername(username).get();
-            return basketRepository.findBasketByUser(user);
+
+            return basketRepository.findBasketByUser(user).orElse(null);
         }
-        return Optional.empty();
+        return null;
     }
 }

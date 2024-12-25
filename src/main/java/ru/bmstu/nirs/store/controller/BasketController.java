@@ -15,19 +15,13 @@ public class BasketController {
 
     @GetMapping
     public String viewBasket(Model model) {
-        var basket = basketService.getCurrentBasket();
-        basket.ifPresent(basketService::setItemsQuantity);
-
-        model.addAttribute("basket", basket.get());
+        model.addAttribute("basket", basketService.viewBasket());
         return "order/basket";
     }
 
     @GetMapping("/{id}")
     public String findById(@PathVariable("id") int id, Model model) {
-        var basket = basketService.findById(id);
-        basket.ifPresent(basketService::setItemsQuantity);
-
-        model.addAttribute("basket", basket);
+        model.addAttribute("basket", basketService.findById(id));
         return "";
     }
 
@@ -40,7 +34,7 @@ public class BasketController {
     @GetMapping("/edit/{id}")
     public String edit(@PathVariable("id") int id, Model model) {
         var basket = basketService.findById(id);
-        basket.ifPresent(basketService::setItemsQuantity);
+        basketService.setItemsQuantity(basket);
 
         model.addAttribute("basket", basket);
         return "";

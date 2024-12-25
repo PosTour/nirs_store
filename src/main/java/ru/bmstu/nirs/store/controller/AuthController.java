@@ -2,6 +2,7 @@ package ru.bmstu.nirs.store.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -10,6 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import ru.bmstu.nirs.store.domain.User;
 import ru.bmstu.nirs.store.repository.UserRepository;
+
+import java.util.Objects;
+import java.util.Set;
 
 @Controller
 @RequestMapping("auth")
@@ -40,6 +44,21 @@ public class AuthController {
             return "user/lks";
         } else {
             return "auth/login";
+        }
+    }
+
+    @GetMapping("/dashboard")
+    public String dashboard(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Set<String> roles = AuthorityUtils.authorityListToSet(authentication.getAuthorities());
+
+        if (roles.contains("ROLE_ADMIN")) {
+            return "redirect:/admin/dashboard";
+        } else if (roles.contains("ROLE_EMPLOYEE")) {
+            return "redirect:/employee/dashboard";
+        } else {
+            return "redirect:/unrecognized";
         }
     }
 }
